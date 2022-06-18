@@ -1,12 +1,17 @@
 #ESTA ES LA CLASE MAIN, IMPORTAR LAS DEMAS CLASES ACA
 from tkinter import *
+import os
+import os.path
+import uuid
 
 class TerminalVeterinario:
 
-    def __init__(self, id, tokenActivacion, mascotas):
+    def __init__(self, id, tokenActivacion, idVeterinaria, nombreVeterinaria):
         self.id = id
         self.tokenActivacion = tokenActivacion
-        self.mascotas = mascotas
+        self.idVeterinaria = idVeterinaria
+        self.nombreVeterinaria = nombreVeterinaria
+        self.mascotas = None
 
     def ingresarMascota(self, mascotaNueva):
         self.mascotas.append(mascotaNueva)
@@ -25,7 +30,19 @@ class TerminalVeterinario:
 
     def consultaBDToken(self):
         pass
-
+    
+    def generarIdTerminal(self):
+        if (os.path.exists("infoTerminal.txt")):
+            with open("infoTerminal.txt", "r") as f:
+                lineasTexto = f.readlines()
+                for i in lineasTexto:
+                    print(i)
+        else:
+            with open("infoTerminal.txt", "w") as f: #si no existe el archivo lo creamos y le damos el formato default
+                idRand = uuid.uuid4()
+                print(idRand)
+                f.write(f"id = {idRand}")
+                
 root = Tk()
 root.title('My Pet Record :)')
 root.geometry("1280x720")
@@ -55,7 +72,5 @@ registro_Operaciones_Label.grid(row=1, column=0)
 vacunas_Suministradas_Label = Label(root, text="Vacunas Suministradas")
 vacunas_Suministradas_Label.grid(row=2, column=0, padx=50)
 
-
-
-
 root.mainloop()
+

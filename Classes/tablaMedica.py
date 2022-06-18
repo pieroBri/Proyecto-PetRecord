@@ -1,11 +1,11 @@
 class TablaMedica:
 
-    def __init__(self, id, fichas, alergias, registroDeOperaciones, vacunasSuministradas):
+    def __init__(self, id, alergias, registroDeOperaciones, vacunasSuministradas):
         self.id = id
-        self.fichas = fichas
+        self.fichas = None
         self.alergias = alergias
-        self.registroDeOperaciones = registroDeOperaciones
-        self.vacunasSuministradas = vacunasSuministradas
+        self.registroDeOperaciones = registroDeOperaciones #string
+        self.vacunasSuministradas = vacunasSuministradas #string
 
     def crearFichaMedica(self):
         pass
