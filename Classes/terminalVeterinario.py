@@ -13,24 +13,48 @@ class TerminalVeterinario:
         self.nombreVeterinaria = nombreVeterinaria
         self.mascotas = None
 
-    def ingresarMascota(self, mascotaNueva):
-        self.mascotas.append(mascotaNueva)
-
-    def verificarLlaveConServidor(self):
-        pass
-
-    def verificarMascota(self):
-        pass
-
     def validarConexionInternet(self):
         pass
 
-    def activarToken(self):
+    def validarLlaveConServidor(self):
         pass
 
-    def consultaBDToken(self):
+    def activarTokenDeActivacion(self):
+        pass
+
+    def consultaBDTokenDeActivacion(self):
+        pass
+
+    def validarTokenDeActivacion(self):
+        pass
+
+    def ingresarMascotaAlSistema(self, mascotaNueva):
+        self.mascotas.append(mascotaNueva)
+
+    def verificarMascotaEnSistema(self):
+        pass
+
+    def agregarFichaMedicaGeneral():
         pass
     
+    def editarFichaMedicaGeneral():
+        pass
+
+    def buscarFichaMedica():
+        pass
+    
+    def crearFichaMedicaConsulta():
+        pass
+
+    def editarFichaMedicaConsulta():
+        pass
+
+    def GenerarConexiónServidor():
+        pass
+
+    def ObtenerDatosMascota():
+        pass
+
     def generarIdTerminal(self):
         if (os.path.exists("infoTerminal.txt")):
             with open("infoTerminal.txt", "r") as f:

@@ -12,19 +12,32 @@ class Mascota:
         self.numeroTelefono = numeroTelefono
         self.direccion = direccion
 
-    def crearTablaMedica(self):
+    def agregarFichaMedicaGeneral(self):
         pass
 
-    def editarTablaMedica(self):
+    def editarFichaMedicaGeneral(self):
         pass
 
-    def agregarFichaMedica(self):
+    def crearFichaMedicaConsulta(self,fichaMedica):
         pass
 
-    def editarFichaMedica(self):
+    def editarFichaMedicaGeneral(self,fichaMedica):
         pass
 
-    def buscarFichaMedica(self):
+    def buscarFichaMedicaConsulta(self):
         pass
 
+    def validarFormatoDatosFichaMedicaGeneral():
+        pass
+
+    def validarFormatoDatosFichaMedica():
+        pass
+
+    def solicitudServCrear():
+        pass
+
+    def solicitudServEditar():
+        pass
+
+    
     #faltan Getter y Setters
