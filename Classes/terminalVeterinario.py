@@ -4,14 +4,18 @@ import os
 import os.path
 import uuid
 
+from terminalVeterinario import TerminalVeterinario
+from tablaMedica import TablaMedica
+from mascota import Mascota
+
 class TerminalVeterinario:
 
-    def __init__(self, id, tokenActivacion, idVeterinaria, nombreVeterinaria):
+    def __init__(self, id : uuid, tokenActivacion, idVeterinaria :uuid, nombreVeterinaria):
         self.id = id
         self.tokenActivacion = tokenActivacion
         self.idVeterinaria = idVeterinaria
         self.nombreVeterinaria = nombreVeterinaria
-        self.mascotas = None
+        self.mascotas = [Mascota]
 
     def validarConexionInternet(self):
         pass
@@ -31,13 +35,16 @@ class TerminalVeterinario:
     def ingresarMascotaAlSistema(self, mascotaNueva):
         self.mascotas.append(mascotaNueva)
 
-    def verificarMascotaEnSistema(self):
-        pass
+    def verificarMascotaEnSistema(self, idMascota):
+        for i in self.mascotas:
+            if(i.id == idMascota):
+                return True
+        return False
 
-    def agregarFichaMedicaGeneral():
+    def llenarinfoBasicaMascota(self, ):
         pass
     
-    def editarFichaMedicaGeneral():
+    def editarInfoBasicaMascota():
         pass
 
     def buscarFichaMedica():

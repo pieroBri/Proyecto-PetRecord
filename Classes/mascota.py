@@ -12,16 +12,17 @@ class Mascota:
         self.numeroTelefono = numeroTelefono
         self.direccion = direccion
 
-    def agregarFichaMedicaGeneral(self):
+    def llenarinfoBasicaMascota(self):
+        nombre, id, expecie, TablaMedica,  
         pass
 
-    def editarFichaMedicaGeneral(self):
+    def editarInfoBasicaMascota(self):
         pass
 
     def crearFichaMedicaConsulta(self,fichaMedica):
         pass
 
-    def editarFichaMedicaGeneral(self,fichaMedica):
+    def editarFichaMedicaConsulta(self,fichaMedica):
         pass
 
     def buscarFichaMedicaConsulta(self):
