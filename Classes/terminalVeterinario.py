@@ -35,7 +35,7 @@ class TerminalVeterinario(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi("Proyecto-PetRecord\Complementos\GUIAPP_keyInsert.ui", self)
+        uic.loadUi("Complementos\GUIAPP_keyInsert.ui", self)
         self.botonConfirmarkey.clicked.connect(self.validarLlaveConServidor) #metodos de botones en el constructor
         
         self.id = self.generarIdTerminal()
@@ -61,16 +61,17 @@ class TerminalVeterinario(QMainWindow):
 
         llaveEntrada = self.keyInput.text()##obtiene los datos ingresados de tiene que ponder en nombre de la clase 
         #toma los valores como string
-        mycursor.execute(f'SELECT Llaves FROM keysactivacion WHERE Llaves = {llaveEntrada}')
+        mycursor.execute(f'SELECT Llaves FROM keysactivación WHERE Llaves = {llaveEntrada}')
         resultado = mycursor.fetchone()
         
-        if(llaveEntrada == resultado[0]):
-            mycursor.execute(f'SELECT Veterinaria_idVeterinaria FROM keysactivacion WHERE Llaves = {llaveEntrada}')
+        if(resultado == None):
+            self.validarLlaveConServidor()
+        else:
+            mycursor.execute(f'SELECT Veterinaria_idVeterinaria FROM Keysactivación WHERE Llaves = {llaveEntrada}')
             idVetActual = mycursor.fetchone()
             
-            mycursor.execute(f'SELECT Veterinaria_nombreVeterinaria FROM keysactivacion WHERE Llaves = {llaveEntrada}')
+            mycursor.execute(f'SELECT Veterinaria_nombreVeterinaria FROM Keysactivación WHERE Llaves = {llaveEntrada}')
             nombreVetActual = mycursor.fetchone()
-            print("holas ")
             self.activarTokenDeActivacion(idVetActual[0], nombreVetActual[0])
 
     def activarTokenDeActivacion(self, idVet, nombreVet):
@@ -81,6 +82,7 @@ class TerminalVeterinario(QMainWindow):
         db.commit()
         self.setIdVeterinaria(idVet)
         self.setNombreVeterinaria(nombreVet)
+        uic.loadUi("Complementos/buscarMascota.ui",self)
 
     def validarTokenDeActivacion(self)->bool :
         
@@ -88,9 +90,12 @@ class TerminalVeterinario(QMainWindow):
         val = (self.id)
         mycursor.execute(sql, (val,))
         resultado = mycursor.fetchone()
-
-        if(resultado[0] == 1):
-            uic.loadUi("Proyecto-PetRecord/Complementos/buscarMascota.ui", self) 
+        
+        if(resultado == None):
+            uic.loadUi("Complementos/GUIAPP_KeyInsert.ui",self)
+            self.botonConfirmarkey.clicked.connect(self.validarLlaveConServidor)
+        elif (resultado[0] == 1):
+            uic.loadUi("Complementos/buscarMascota.ui", self)
 
     def ingresarMascotaAlSistema(self, mascotaNueva: list):
         self.mascotas.append(mascotaNueva)
