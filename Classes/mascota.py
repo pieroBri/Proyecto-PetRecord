@@ -1,6 +1,6 @@
 class Mascota:
 
-    def __init__(self, nombre, id, especie, tablaMedica, color, raza, nombreTutor, rutTutor, numeroTelefono, direccion):
+    def __init__(self, id, nombre, especie, color, raza, nombreTutor, rutTutor, numeroTelefono, direccion, tablaMedica):
         self.nombre = nombre
         self.id = id
         self.especie = especie
@@ -11,10 +11,6 @@ class Mascota:
         self.rutTutor = rutTutor
         self.numeroTelefono = numeroTelefono
         self.direccion = direccion
-
-    def llenarinfoBasicaMascota(self):
-        nombre, id, expecie, TablaMedica,  
-        pass
 
     def editarInfoBasicaMascota(self):
         pass
