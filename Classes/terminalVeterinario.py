@@ -7,6 +7,8 @@ import uuid
 
 import mysql.connector
 
+from fichaMedica import FichaMedica
+
 
 db = mysql.connector.connect(
     user='piero',
@@ -16,7 +18,7 @@ db = mysql.connector.connect(
     port='3306'
 )
 
-mycursor = db.cursor()
+mycursor = db.cursor(buffered = True)
 mycursor.execute('select * from fichaMedica')
 
 
@@ -87,6 +89,7 @@ class TerminalVeterinario(QMainWindow):
             tablaEntregar = TablaMedica(resultado[9],  alergiasEntregar, registroOp, registroVac)
             mascotalol= Mascota(resultado[0], resultado[1], resultado[2], resultado[3], resultado[4], resultado[5], resultado[6],
                                     resultado[7], resultado[8], tablaEntregar)
+            mascotalol.getTablaMedica().cargarFichas()
             self.mascotas.append(mascotalol)
             
             
@@ -185,43 +188,67 @@ class TerminalVeterinario(QMainWindow):
             self.botonEntrar.setVisible(False)
             self.llenarInfoBasicaMascota(idMascotaBuscada)
 
-    def verScreenDatosTotal(self, mascotaMostrada):
+    def verScreenDatosTotal(self, mascotaMostrada:Mascota):
         alergias = ''
         operaciones = ''
         vacunas = ''
         uic.loadUi("Complementos/VistaDatosMascotaTotal.ui", self)
         value = self.infoBasicaMascota.item(0)
-        value.setText(value.text() + '  '+ str(mascotaMostrada.nombre))
+        value.setText(value.text() + '  '+ str(mascotaMostrada.getNombreMascota()))
         value = self.infoBasicaMascota.item(1)
-        value.setText(value.text() + '  '+ str(mascotaMostrada.especie))
+        value.setText(value.text() + '  '+ str(mascotaMostrada.getEspecie()))
         value = self.infoBasicaMascota.item(2)
-        value.setText(value.text() + '  '+ str(mascotaMostrada.raza))
+        value.setText(value.text() + '  '+ str(mascotaMostrada.getRaza()))
         value = self.infoBasicaMascota.item(3)
-        value.setText(value.text() + '  '+ str(mascotaMostrada.color))
+        value.setText(value.text() + '  '+ str(mascotaMostrada.getColorMascota()))
         value = self.infoBasicaMascota.item(4)
-        value.setText(value.text() + '  '+ str(mascotaMostrada.rutTutor))
+        value.setText(value.text() + '  '+ str(mascotaMostrada.getRutTutor()))
         value = self.infoBasicaMascota.item(5)
-        value.setText(value.text() + '  '+ str(mascotaMostrada.numeroTelefono))
+        value.setText(value.text() + '  '+ str(mascotaMostrada.getNumeroTelefono()))
         value = self.infoBasicaMascota.item(6)
-        value.setText(value.text() + '  '+ str(mascotaMostrada.direccion))
+        value.setText(value.text() + '  '+ str(mascotaMostrada.getDireccion()))
 
+        tablaMedicaActual = mascotaMostrada.getTablaMedica()
         value2 = self.datoTablaMedica.item(0)
-        for i in range(len(mascotaMostrada.tablaMedica.alergias)):
-            alergias = alergias + str(mascotaMostrada.tablaMedica.alergias[i][1])
-        value2.setText(value2.text() + '  '+ alergias)
+        for i in range(len(tablaMedicaActual.getAlergias())):
+            alergias = alergias + str(tablaMedicaActual.getAlergias()[i][1])
+        value2.setText(value2.text() + '  ' + alergias)
         
         value2 = self.datoTablaMedica.item(1)
-        for i in range(len(mascotaMostrada.tablaMedica.registroDeOperaciones)):
-            operaciones = operaciones + str(mascotaMostrada.tablaMedica.registroDeOperaciones[i][1])
-        value2.setText(value2.text() + '  '+ operaciones)
+        for i in range(len(tablaMedicaActual.getRegistroDeOperaciones())):
+            operaciones = operaciones + str(tablaMedicaActual.getRegistroDeOperaciones()[i][1])
+        value2.setText(value2.text() + '  ' + operaciones)
 
         value2 = self.datoTablaMedica.item(2)
-        for i in range(len(mascotaMostrada.tablaMedica.vacunasSuministradas)):
-            vacunas = vacunas + str(mascotaMostrada.tablaMedica.vacunasSuministradas[i][1])
-        value2.setText(value2.text() + '  '+ vacunas)
+        for i in range(len(tablaMedicaActual.getVacunasSuministradas())):
+            vacunas = vacunas + str(tablaMedicaActual.getVacunasSuministradas()[i][1])
+        value2.setText(value2.text() + '  ' + vacunas)
 
-        boton = QLabel('LOL click', self)
-        boton.move(10, 10)
+        for i in range(len(tablaMedicaActual.fichas)):
+            item = QListWidgetItem('Ficha del : '+str(tablaMedicaActual.getFichas()[i].getFechaConsulta()))
+            self.listWidFichas.addItem(item)
+
+        self.botonFichaSelected.clicked.connect(lambda: self.getFichaMascota(mascotaMostrada))
+
+    def getFichaMascota(self, mascotaMostrar:Mascota):
+        itemSelected = self.listWidFichas.currentItem()
+        cadenaAux = str(itemSelected.text())
+        fecha = cadenaAux.split('Ficha del : ')
+        fecha = fecha[1]
+        fichas = mascotaMostrar.getTablaMedica().getFichas()
+
+        for i in fichas:
+            if (str(i.getFechaConsulta()) ==  str(fecha)):
+                ficha = i
+        
+        self.verFichaMedica(ficha)
+        
+
+
+    def verFichaMedica(self,fichaMedica:FichaMedica):
+        uic.loadUi("Complementos/formularioFicha.ui", self)
+        print(str(fichaMedica.getFechaConsulta()))
+
         
     def llenarInfoBasicaMascota(self, idMascota):
         # self.ingresarMascotaAlSistema(mascotaEnviada)
