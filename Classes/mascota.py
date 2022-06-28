@@ -1,3 +1,6 @@
+from tablaMedica import TablaMedica
+
+
 class Mascota:
 
     def __init__(self, id, nombre, especie, color, raza, nombreTutor, rutTutor, numeroTelefono, direccion, tablaMedica):
@@ -36,5 +39,30 @@ class Mascota:
     def solicitudServEditar():
         pass
 
+    def getTablaMedica(self) -> TablaMedica:
+        return self.tablaMedica
     
+    def getNombreMascota(self):
+        return self.nombre
+
+    def getColorMascota(self):
+        return self.color
+
+    def getEspecie(self):
+        return self.especie
+
+    def getRaza(self):
+        return self.raza
+
+    def getNombreTutor(self):
+        return self.nombreTutor
+
+    def getRutTutor(self):
+        return self.rutTutor
+
+    def getNumeroTelefono(self):
+        return self.numeroTelefono
+
+    def getDireccion(self):
+        return self.direccion
     #faltan Getter y Setters

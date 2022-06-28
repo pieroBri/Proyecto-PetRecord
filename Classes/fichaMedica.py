@@ -1,25 +1,112 @@
+import mysql.connector
+
+
+db = mysql.connector.connect(
+    user='piero',
+    password='pieron123',
+    host='localhost',
+    database='mydb',
+    port='3306'
+)
+
+mycursor = db.cursor()
+
 class FichaMedica:
 
-    def __init__(self, id, idTabla, sucursalVeterinaria, veterinarioACargo, fechaConsulta, medicamentosConsulta, causaDeLaVisita, operacion, operacionFicha, vacunasSuministradasConsulta, frecRespiratoria, frecCardiaca, peso, edad, hospitalizacion, hospitalizacionFicha, sedacion, sedacionFicha):
+    def __init__(self, id, idTabla, sucursalVeterinaria, veterinarioACargo, fechaConsulta, operacion, frecRespiratoria, frecCardiaca, peso, edad, hospitalizacion, sedacion):
         self.id = id
         self.idTabla = idTabla
         self.sucursalVeterinaria = sucursalVeterinaria
         self.veterinarioACargo = veterinarioACargo
         self.fechaConsulta = fechaConsulta
-        self.medicamentosConsulta = medicamentosConsulta
-        self.causaDeLaVisita = causaDeLaVisita
+        self.medicamentosConsulta = []
         self.operacion = operacion
-        self.operacionFicha = operacionFicha
-        self.vacunasSuministradasConsulta = vacunasSuministradasConsulta
+        self.operacionFicha = None
+        self.vacunasSuministradasConsulta = None
         self.frecRespiratoria = frecRespiratoria
         self.frecCardiaca = frecCardiaca
         self.peso = peso
         self.edad = edad
         self.hospitalizacion = hospitalizacion
-        self.hospitalizacionFicha = hospitalizacionFicha
+        self.hospitalizacionFicha = None
         self.sedacion = sedacion
-        self.sedacionFicha = sedacionFicha
+        self.sedacionFicha = None
+        self.tratamientoFicha = None
 
+    def setOpFicha(self):
+        if(self.operacion == 1):
+            sql = 'SELECT * FROM fichaOperación WHERE FichaMedica_idFichaMedica = (%s)'
+            mycursor.execute(sql, (str(self.id),))
+            opFicha = mycursor.fetchone()
+            if(opFicha[3] == 1):
+                aut = True
+            else:
+                aut = False
+            self.operacionFicha = {
+                'id':opFicha[0],
+                'diagnostico':opFicha[1],
+                'cirugiaARealizar':opFicha[2],
+                'autTutor': aut
+            }
+    
+    def setmedicamentosConsulta(self):
+        sql = 'SELECT * FROM medicamentosconsulta WHERE FichaMedica_idFichaMedica = (%s)'
+        mycursor.execute(sql, (str(self.id),))
+        medicamentos = mycursor.fetchall()
+        for medicamento in medicamentos:
+            med = {
+            'id' : medicamento[0],
+            'nomMedicamento' : medicamento[1],
+            }
+            self.medicamentosConsulta.append(med)
+        
+    def setVacFicha(self):
+        sql = 'SELECT * FROM VacunasSuministradasConsulta WHERE FichaMedica_idFichaMedica = (%s)'
+        mycursor.execute(sql, (str(self.id),))
+        vacunas = mycursor.fetchall()
+        for vacuna in vacunas:
+            vac = {
+            'id' : vacuna[0],
+            'nomMedicamento' : vacuna[1],
+            }
+            self.medicamentosConsulta.append(vac)
+
+    def setHospFicha(self):
+        if(self.hospitalizacion == 1):
+            sql = 'SELECT * FROM FichaHospitalización WHERE FichaMedica_idFichaMedica = (%s)'
+            mycursor.execute(sql, (str(self.id),))
+            hospiFicha = mycursor.fetchone()
+            self.hospitalizacionFicha = {
+                'id':hospiFicha[0],
+                'motivo':hospiFicha[1],
+            }
+
+    def setSedFicha(self):
+        if (self.sedacion == 1):
+            sql = 'SELECT * FROM FichaSedación WHERE FichaMedica_idFichaMedica = (%s)'
+            mycursor.execute(sql, (str(self.id),))
+            sedacion = mycursor.fetchone()
+            if(sedacion[1] == 1):
+                aut = True
+            else:
+                aut = False
+            self.sedacionFicha =  {
+                'id':sedacion[0],
+                'autorizacion':aut,
+            }
+
+    def setTratamiento(self):
+        sql = 'SELECT * FROM TratamientosConsulta WHERE FichaMedica_idFichaMedica = (%s)'
+        mycursor.execute(sql, (str(self.id),))
+        tratamientos = mycursor.fetchall()
+        for tratamiento in tratamientos:
+            trat = {
+            'id' : tratamiento[0],
+            'nombreTratamiento': tratamiento[1],
+            'causaVisita' : tratamiento[2],
+            }
+            self.medicamentosConsulta.append(trat)
+        
     def editarFichaMedica(self):
         pass
 
