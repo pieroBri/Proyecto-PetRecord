@@ -29,9 +29,9 @@ class TablaMedica:
         mycursor.execute(sql, (str(self.id),))
         fichas = mycursor.fetchall()
         for ficha in fichas:
-            ficham = FichaMedica(ficha[0],ficha[1],ficha[2],ficha[3],ficha[4],ficha[5],ficha[6],ficha[7],ficha[8],ficha[9],ficha[10],ficha[11])
+            ficham = FichaMedica(ficha[0],ficha[1],ficha[2],ficha[3],ficha[4],ficha[5],ficha[6],ficha[7],ficha[8],ficha[9],ficha[10],ficha[11], ficha[12])
             ficham.setOpFicha()
-            ficham.setmedicamentosConsulta()
+            ficham.setMedicamentosConsulta()
             ficham.setVacFicha()
             ficham.setHospFicha()
             ficham.setSedFicha()

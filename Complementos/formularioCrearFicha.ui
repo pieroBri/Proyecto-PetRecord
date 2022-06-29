@@ -246,52 +246,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="buttAgregarTratamientos">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>230</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Agregar</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="buttAgregarMedicamentos">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>290</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Agregar</string>
-    </property>
-   </widget>
-   <widget class="QListWidget" name="tratamientosList">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>220</y>
-      <width>391</width>
-      <height>41</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QListWidget" name="medicamentosList">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>280</y>
-      <width>391</width>
-      <height>41</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QDateEdit" name="fechaConsulta">
     <property name="geometry">
      <rect>
@@ -300,29 +254,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
       <width>110</width>
       <height>22</height>
      </rect>
-    </property>
-   </widget>
-   <widget class="QListWidget" name="vacunasList">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>400</y>
-      <width>391</width>
-      <height>41</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="buttAgregarVacunas">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>410</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Agregar</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_12">
@@ -350,7 +281,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
    </widget>
    <widget class="QPushButton" name="botonAgregarFicha">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -455,6 +386,36 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
      </rect>
     </property>
    </widget>
+   <widget class="QLineEdit" name="inputTratamientos">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>220</y>
+      <width>391</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="inputMedicamentos">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>280</y>
+      <width>391</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="inputVacunas">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>400</y>
+      <width>391</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>label</zorder>
    <zorder>label_2</zorder>
    <zorder>label_3</zorder>
@@ -473,13 +434,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
    <zorder>inputPeso</zorder>
    <zorder>label_11</zorder>
    <zorder>inputEdad</zorder>
-   <zorder>buttAgregarTratamientos</zorder>
-   <zorder>buttAgregarMedicamentos</zorder>
-   <zorder>tratamientosList</zorder>
-   <zorder>medicamentosList</zorder>
    <zorder>fechaConsulta</zorder>
-   <zorder>vacunasList</zorder>
-   <zorder>buttAgregarVacunas</zorder>
    <zorder>label_12</zorder>
    <zorder>inputTemp</zorder>
    <zorder>botonAgregarFicha</zorder>
@@ -487,6 +442,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
    <zorder>botonAgregarFichaOperacion</zorder>
    <zorder>botonAgregarFichaHosp</zorder>
    <zorder>contenedorBoton</zorder>
+   <zorder>inputTratamientos</zorder>
+   <zorder>inputMedicamentos</zorder>
+   <zorder>inputVacunas</zorder>
   </widget>
  </widget>
  <resources/>
