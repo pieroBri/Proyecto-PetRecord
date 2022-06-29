@@ -39,6 +39,9 @@ class Mascota:
     def solicitudServEditar():
         pass
 
+    def getId(self):
+        return self.id
+
     def getTablaMedica(self) -> TablaMedica:
         return self.tablaMedica
     
