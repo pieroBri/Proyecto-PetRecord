@@ -436,11 +436,24 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
       <height>35</height>
      </rect>
     </property>
+    <property name="visible">
+     <bool>false</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(255, 0, 0);</string>
     </property>
     <property name="text">
      <string>Verifique los campos</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="contenedorBotonOperacion" native="true">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>830</y>
+      <width>141</width>
+      <height>51</height>
+     </rect>
     </property>
    </widget>
   </widget>
