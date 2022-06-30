@@ -38,6 +38,7 @@ class TablaMedica:
             ficham.setTratamiento()
             self.fichas.append(ficham)
 
+
     def crearFichaMedicaConsulta(self):
         pass
 
