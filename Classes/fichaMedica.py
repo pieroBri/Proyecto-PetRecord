@@ -2,8 +2,8 @@ import mysql.connector
 
 
 db = mysql.connector.connect(
-    user='piero',
-    password='pieron123',
+    user='root',
+    password='root',
     host='localhost',
     database='mydb',
     port='3306'
@@ -211,6 +211,7 @@ class FichaMedica:
         sql = 'SELECT * FROM TratamientosConsulta WHERE FichaMedica_idFichaMedica = (%s)'
         mycursor.execute(sql, (str(self.id),))
         tratamientos = mycursor.fetchall()
+        print(tratamientos)
         for tratamiento in tratamientos:
             trat = {
             'id' : tratamiento[0],

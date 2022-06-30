@@ -4,15 +4,15 @@ import os
 import os.path
 import uuid
 
-
+from datetime import datetime
 import mysql.connector
+import socket
 
 from fichaMedica import FichaMedica
 
-
 db = mysql.connector.connect(
-    user='piero',
-    password='pieron123',
+    user='root',
+    password='root',
     host='localhost',
     database='mydb',
     port='3306'
@@ -26,7 +26,7 @@ resultado = mycursor.fetchone()
 
 #import para el uso de la interfaz grafica de qt
 import sys
-from PyQt5 import uic, QtCore
+from PyQt5 import uic, QtCore, QtGui
 from PyQt5.QtWidgets import *
 
 
@@ -56,7 +56,11 @@ class TerminalVeterinario(QMainWindow):
         
 
     def validarConexionInternet(self):
-        pass
+        try:
+            socket.create_connection(('Google.com',80))
+            return True
+        except OSError:
+            return False
         
     def setIdVeterinaria(self):
         sql = 'SELECT Veterinaria_idVeterinaria FROM TerminalVeterinario WHERE idTerminalVeterinario = (%s)'
@@ -105,7 +109,6 @@ class TerminalVeterinario(QMainWindow):
         
         if(resultado == None):
             self.label_3.setVisible(True)
-            self.validarLlaveConServidor()
         else:
             mycursor.execute(f'SELECT Veterinaria_idVeterinaria FROM Keysactivación WHERE Llaves = {llaveEntrada}')
             idVetActual = mycursor.fetchone()
@@ -129,18 +132,20 @@ class TerminalVeterinario(QMainWindow):
 
     def validarTokenDeActivacion(self):
         
-        sql = 'SELECT tokenDeActivación FROM terminalveterinario WHERE idTerminalVeterinario = (%s)'
-        val = (self.id)
-        mycursor.execute(sql, (val,))
-        resultado = mycursor.fetchone()
-        
-        if(resultado == None):
-            uic.loadUi("Complementos/GUIAPP_KeyInsert.ui",self)
-            self.botonConfirmarkey.clicked.connect(self.validarLlaveConServidor)
-        elif(resultado[0] == 1):
-            self.tokenActivacion = True
-            uic.loadUi("Complementos/buscarMascota.ui", self)
-            self.BotonBuscar.clicked.connect(self.verificarMascotaEnSistema)
+        if(self.validarConexionInternet()):
+            sql = 'SELECT tokenDeActivación FROM terminalveterinario WHERE idTerminalVeterinario = (%s)'
+            val = (self.id)
+            mycursor.execute(sql, (val,))
+            resultado = mycursor.fetchone()
+            
+            if(resultado == None):
+                uic.loadUi("Complementos/GUIAPP_KeyInsert.ui",self)
+                self.botonConfirmarkey.clicked.connect(self.validarLlaveConServidor)
+            elif(resultado[0] == 1):
+                self.tokenActivacion = True
+                uic.loadUi("Complementos/buscarMascota.ui", self)
+                self.MensajeErrorBusqueda.setVisible(False)
+                self.BotonBuscar.clicked.connect(self.verificarMascotaEnSistema)
             
 
     def ingresarMascotaAlSistema(self, mascotaNueva: list):
@@ -148,55 +153,61 @@ class TerminalVeterinario(QMainWindow):
         mycursor.execute('')
 
     def verificarMascotaEnSistema(self):
-        idMascotaBuscada = self.inputBuscar.text()
-        sql = 'SELECT idMascota FROM mascota WHERE idMascota = (%s)'
-        mycursor.execute(sql, (idMascotaBuscada,))
-        resultado = mycursor.fetchone()
-        if(resultado != None):
-            sql = 'SELECT Mascota_idMascota FROM Mascota_has_TerminalVeterinario WHERE TerminalVeterinario_Veterinaria_idVeterinaria = (%s)'
-            mycursor.execute(sql, (self.idVeterinaria,))
-            resultado = mycursor.fetchall()
-            flagMascotaEnc = False
-            for id in resultado:
-                if(id[0] == str(idMascotaBuscada)):
-                    flagMascotaEnc = True
-            self.botonAgregar.setVisible(False)
-            if(flagMascotaEnc):
-                sql = 'SELECT * FROM mascota WHERE idMascota = (%s)'
-                mycursor.execute(sql, (idMascotaBuscada,))
-                resultado2 = mycursor.fetchone()
-                self.datosMostrar.setText('Codigo mascota: ' + str(resultado2[0]) + ', Nombre mascota: ' 
-                + str(resultado2[1]) + ', Especie: ' + str(resultado2[2]) + ', Raza: ' + str(resultado2[4]) + ', Dueño/a: ' + str(resultado2[5]))
-                self.datosMostrar.setVisible(True)
-                self.botonEntrar.setVisible(True)
-                self.botonAbstracto.setVisible(False)
-                for mascota in self.mascotas:
-                    if(mascota.getId() == idMascotaBuscada):
-                        mascotaMostrada = mascota
-                self.botonEntrar.clicked.connect(lambda : self.verScreenDatosTotal(mascotaMostrada))
+
+        if(self.inputBuscar.text() != ""): #& len(self.inputBuscar.text()) == 15):
+            self.MensajeErrorBusqueda.setVisible(False)
+            idMascotaBuscada = self.inputBuscar.text()
+            sql = 'SELECT idMascota FROM mascota WHERE idMascota = (%s)'
+            mycursor.execute(sql, (idMascotaBuscada,))
+            resultado = mycursor.fetchone()
+            if(resultado != None):
+                sql = 'SELECT Mascota_idMascota FROM Mascota_has_TerminalVeterinario WHERE TerminalVeterinario_Veterinaria_idVeterinaria = (%s)'
+                mycursor.execute(sql, (self.idVeterinaria,))
+                resultado = mycursor.fetchall()
+                flagMascotaEnc = False
+                for id in resultado:
+                    if(id[0] == str(idMascotaBuscada)):
+                        flagMascotaEnc = True
+                self.botonAgregar.setVisible(False)
+                if(flagMascotaEnc):
+                    sql = 'SELECT * FROM mascota WHERE idMascota = (%s)'
+                    mycursor.execute(sql, (idMascotaBuscada,))
+                    resultado2 = mycursor.fetchone()
+                    self.datosMostrar.setText('Codigo mascota: ' + str(resultado2[0]) + ', Nombre mascota: ' 
+                    + str(resultado2[1]) + ', Especie: ' + str(resultado2[2]) + ', Raza: ' + str(resultado2[4]) + ', Dueño/a: ' + str(resultado2[5]))
+                    self.datosMostrar.setVisible(True)
+                    self.botonEntrar.setVisible(True)
+                    self.botonAbstracto.setVisible(False)
+                    for mascota in self.mascotas:
+                        if(mascota.getId() == idMascotaBuscada):
+                            mascotaMostrada = mascota
+                    self.botonEntrar.clicked.connect(lambda : self.verScreenDatosTotal(mascotaMostrada))
+                else:
+                    sql = 'SELECT * FROM mascota WHERE idMascota = (%s)'
+                    mycursor.execute(sql, (idMascotaBuscada,))
+                    resultado2 = mycursor.fetchone()
+                    self.datosMostrar.setText('Codigo mascota: ' + str(resultado2[0]) + ', Nombre mascota: ' 
+                    + str(resultado2[1]) + ', Especie: ' + str(resultado2[2]) + ', Raza: ' + str(resultado2[4]) + ', Dueño/a: ' + str(resultado2[5]))
+                    self.datosMostrar.setVisible(True)
+                    self.botonAbstracto.setVisible(True)
+                    self.botonEntrar.setVisible(False)
             else:
-                sql = 'SELECT * FROM mascota WHERE idMascota = (%s)'
-                mycursor.execute(sql, (idMascotaBuscada,))
-                resultado2 = mycursor.fetchone()
-                self.datosMostrar.setText('Codigo mascota: ' + str(resultado2[0]) + ', Nombre mascota: ' 
-                + str(resultado2[1]) + ', Especie: ' + str(resultado2[2]) + ', Raza: ' + str(resultado2[4]) + ', Dueño/a: ' + str(resultado2[5]))
+                #Funcion registrar mascota
+                self.datosMostrar.setText('Mascota no ingresada en el sistema')
+                self.botonAgregar.setVisible(True)
                 self.datosMostrar.setVisible(True)
-                self.botonAbstracto.setVisible(True)
+                self.botonAbstracto.setVisible(False)
                 self.botonEntrar.setVisible(False)
+                self.llenarInfoBasicaMascota(idMascotaBuscada)
         else:
-            #Funcion registrar mascota
-            self.datosMostrar.setText('Mascota no ingresada en el sistema')
-            self.botonAgregar.setVisible(True)
-            self.datosMostrar.setVisible(True)
-            self.botonAbstracto.setVisible(False)
-            self.botonEntrar.setVisible(False)
-            self.llenarInfoBasicaMascota(idMascotaBuscada)
+            self.MensajeErrorBusqueda.setVisible(True)
 
     def verScreenDatosTotal(self, mascotaMostrada:Mascota):
         alergias = ''
         operaciones = ''
         vacunas = ''
         uic.loadUi("Complementos/VistaDatosMascotaTotal.ui", self)
+        self.mensajeErrorSeleccionFicha.setVisible(False)
         value = self.infoBasicaMascota.item(0)
         value.setText(value.text() + '  '+ str(mascotaMostrada.getNombreMascota()))
         value = self.infoBasicaMascota.item(1)
@@ -232,22 +243,33 @@ class TerminalVeterinario(QMainWindow):
             item = QListWidgetItem('Ficha del : '+str(tablaMedicaActual.getFichas()[i].getFechaConsulta()))
             self.listWidFichas.addItem(item)
 
+
+        self.botonVolver.clicked.connect(self.volverBuscar)
         self.botonFichaSelected.clicked.connect(lambda: self.getFichaMascota(mascotaMostrada))
         self.agregarFicha.clicked.connect(lambda: self.crearFichaMedicaConsulta(mascotaMostrada))
 
-
+    def volverBuscar(self):
+        uic.loadUi("Complementos/buscarMascota.ui", self)
+        self.verificarMascotaEnSistema()
+        
+        
     def getFichaMascota(self, mascotaMostrar:Mascota):
         itemSelected = self.listWidFichas.currentItem()
-        cadenaAux = str(itemSelected.text())
-        fecha = cadenaAux.split('Ficha del : ')
-        fecha = fecha[1]
-        fichas = mascotaMostrar.getTablaMedica().getFichas()
+   
+        if(itemSelected != None):
+            self.mensajeErrorSeleccionFicha.setVisible(False)
+            cadenaAux = str(itemSelected.text())
+            fecha = cadenaAux.split('Ficha del : ')
+            fecha = fecha[1]
+            fichas = mascotaMostrar.getTablaMedica().getFichas()
 
-        for i in fichas:
-            if (str(i.getFechaConsulta()) ==  str(fecha)):
-                ficha = i
-        
-        self.verFichaMedica(ficha, mascotaMostrar)
+            for i in fichas:
+                if (str(i.getFechaConsulta()) ==  str(fecha)):
+                    ficha = i
+            
+            self.verFichaMedica(ficha, mascotaMostrar)
+        else:
+            self.mensajeErrorSeleccionFicha.setVisible(True)
         
 
     def verFichaMedica(self,fichaMedica:FichaMedica, mascotaVolver):
@@ -334,127 +356,268 @@ class TerminalVeterinario(QMainWindow):
     def crearFichaMedicaConsulta(self, mascota : Mascota):
 
         uic.loadUi("Complementos/formularioCrearFicha.ui", self)
-
-        # Generar id ficha
-        # idFicha = uuid.uuid4()
-        # idTabla = mascota.getTablaMedica().getId()
-        # sucursalVet = self.inputSucursal.text()
-        # vetACargo = self.inputVetCargo.text()
-        # date = self.fechaConsulta.date()
-        # date = date.toPyDate()
-        # frecResp = self.inputFrecRespiratoria.text()
-        # frecCard = self.inputFrecCardiaca.text()
-        # peso = self.inputPeso.text()
-        # edad = self.inputEdad.text()
-        # temp = self.inputTemp.text()
+        self.botonAgregarFichaOperacion.setEnabled(False)
+        self.botonAgregarFichaHosp.setEnabled(False)
+        self.botonAgregarFichaSedacion.setEnabled(False)
         
-        # causaVisita = self.inputCausaVisita.text()
-        # tratamientosAux = self.inputTratamientos.text()
-        # medicamentosAux = self.inputMedicamentos.text()
-        # vacunasAux = self.inputVacunas.text()
-        # print(str(idTabla) + str())
-        # tratamientosAux = tratamientosAux.split(';')
-        # operacion = []
-        # hospt = []
-        # sedacion = []
-        # operacion.append(False)
-        # hospt.append(False)
-        # sedacion.append(False)
-        # self.botonAgregarFichaOperacion.clicked.connect(lambda : self.crearFichaOperacion(mascota, operacion))
-        # self.botonAgregarFichaHosp.clicked.connect(lambda : self.crearFichaHospitalizacion(mascota, hospt))
-        # self.botonAgregarFichaSedacion.clicked.connect(lambda : self.crearFichaSedacion(mascota, sedacion))
-          
-
+        self.inputFrecRespiratoria.setPlaceholderText("35rpm")
+        self.inputFrecRespiratoria.setFocus()
+        self.inputFrecCardiaca.setPlaceholderText("35bpm")
+        self.inputFrecCardiaca.setFocus()
+        self.inputPeso.setPlaceholderText("Peso en kg 3.34")
+        self.inputPeso.setFocus()
+        self.inputEdad.setPlaceholderText("3 años o meses o dias")
+        self.inputEdad.setFocus()
+        self.inputTemp.setPlaceholderText("temperatura en grados 12.1")
+        self.inputTemp.setFocus()
+        self.inputTratamientos.setPlaceholderText("desparasitación; vacunación")
+        self.inputTratamientos.setFocus()
+        self.inputMedicamentos.setPlaceholderText("tetraciclina; tobramicina")
+        self.inputMedicamentos.setFocus()
+        self.inputVacunas.setPlaceholderText("distemper; parvovirus")
+        self.inputVacunas.setFocus()
         self.botonAgregarFicha.clicked.connect(lambda : self.guardarFichaBd(mascota))
+
+        self.botonVolver.clicked.connect(lambda : self.verScreenDatosTotal(mascota))
         
 
 
     def guardarFichaBd(self, mascota):
 
-        idFicha = uuid.uuid4()
-        idTabla = mascota.getTablaMedica().getId()
-        sucursalVet = self.inputSucursal.text()
-        vetACargo = self.inputVetCargo.text()
-        date = self.fechaConsulta.date()
-        date = date.toPyDate()
-        frecResp = self.inputFrecRespiratoria.text()
-        frecCard = self.inputFrecCardiaca.text()
-        peso = self.inputPeso.text()
-        edad = self.inputEdad.text()
-        temp = self.inputTemp.text()
         
-        causaVisita = self.inputCausaVisita.text()
-        tratamientosAux = self.inputTratamientos.text()
-        medicamentosAux = self.inputMedicamentos.text()
-        vacunasAux = self.inputVacunas.text()
-        print('------------'+str(date))
-        tratamientosAux = tratamientosAux.split(';')
-        operacion = []
-        hospt = []
-        sedacion = []
-        operacion.append(False)
-        hospt.append(False)
-        sedacion.append(False)
-        self.botonAgregarFichaOperacion.clicked.connect(lambda : self.crearFichaOperacion(mascota, operacion[0]))
-        self.botonAgregarFichaHosp.clicked.connect(lambda : self.crearFichaHospitalizacion(mascota, hospt[0]))
-        self.botonAgregarFichaSedacion.clicked.connect(lambda : self.crearFichaSedacion(mascota, sedacion[0]))
+            idFicha = uuid.uuid4()
+            idTabla = mascota.getTablaMedica().getId()
+            sucursalVet = self.inputSucursal.text()
+            vetACargo = self.inputVetCargo.text()
+            date = self.fechaConsulta.date()
+            date = date.toPyDate()
+            frecResp = self.inputFrecRespiratoria.text()
+            frecCard = self.inputFrecCardiaca.text()
+            peso = self.inputPeso.text()
+            edad = self.inputEdad.text()
+            temp = self.inputTemp.text()
 
-        ficham = FichaMedica(idFicha, sucursalVet, vetACargo, date, operacion[0], frecResp, frecCard, peso, edad, hospt[0], sedacion[0], temp, idTabla)
+            
+            hospt = []
+            sedacion = []
+            operacion = []
 
-        ficham.setVacFicha()
-        ficham.setMedicamentosConsulta()
-        ficham.setTratamiento()
-        mascota.getTablaMedica().getFichas().append(ficham)
+            operacion.append(False)
+            sedacion.append(False)
+            hospt.append(False)
+            
+            causaVisita = self.inputCausaVisita.text()
+            tratamientosAux = self.inputTratamientos.text()
+            medicamentosAux = self.inputMedicamentos.text()
+            vacunasAux = self.inputVacunas.text()
 
-        sql = 'INSERT INTO FichaMedica VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-        mycursor.execute(sql, (str(ficham.getId()), str(ficham.getSucursalVeterinaria()), str(ficham.getVeterinarioACargo()), str(ficham.getFechaConsulta()), ficham.getOperacion(), str(ficham.getFrecRespiratoria()), str(ficham.getFrecCardiaca()), ficham.getPeso(), str(ficham.getEdad()), ficham.getHospitalizacion(), ficham.getSedacion(), ficham.getTemp(), str(ficham.getIdTabla())))
-        db.commit()
-        tratamientos = []
-        for trat in tratamientosAux:
-            tratamientos.append(trat)
-            idTratamiento = str(uuid.uuid4())
-            sql = 'INSERT INTO TratamientosConsulta (idTratamientosConsulta, nombreTratamientos, caudaDeLaVisita, FichaMedica_idFichaMedica, FichaMedica_TablaMedica_idTablaMedica) VALUES (%s, %s, %s, %s, %s)'
-            mycursor.execute(sql, (str(idTratamiento), str(trat), str(causaVisita), str(ficham.getId()), str(ficham.getIdTabla())))
+            uic.loadUi("Complementos/formularioCrearFicha.ui", self)
+
+            self.botonAgregarFicha.setEnabled(False)
+            self.botonVolver.clicked.connect(lambda : self.verScreenDatosTotal(mascota))
+            validator = QtGui.QIntValidator(1,100, self)
+
+
+            self.inputSucursal.setText(sucursalVet)
+            self.inputVetCargo.setText(vetACargo)
+            qdate = QtCore.QDate.fromString(str(date), "yyyy-MM-dd")
+            self.fechaConsulta.setDisplayFormat("yyyy-MM-dd")
+            self.fechaConsulta.setDate(qdate)
+            self.inputFrecRespiratoria.setText(str(frecResp))
+            self.inputFrecCardiaca.setText(str(frecCard))
+            self.inputPeso.setText(str(peso))
+            self.inputPeso.setValidator(validator)
+            self.inputEdad.setText(str(edad))
+            self.inputTemp.setText(str(temp))
+            self.inputCausaVisita.setText(causaVisita)
+            self.inputTratamientos.setText(tratamientosAux)
+            self.inputMedicamentos.setText(medicamentosAux)
+            self.inputVacunas.setText(vacunasAux)
+
+            self.botonAgregarFichaOperacion.setEnabled(True)
+            self.botonAgregarFichaHosp.setEnabled(True)
+            self.botonAgregarFichaSedacion.setEnabled(True)
+            
+            now = datetime.now()
+            current_time = now.strftime("%H:%M:%S")
+            date = f'{date} {current_time}'
+
+            ficham = FichaMedica(idFicha, sucursalVet, vetACargo, date, operacion[0], frecResp, frecCard, peso, edad, hospt[0], sedacion[0], temp, idTabla)
+            
+
+            sql = 'INSERT INTO FichaMedica VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+            mycursor.execute(sql, (str(ficham.getId()), str(ficham.getSucursalVeterinaria()), str(ficham.getVeterinarioACargo()), str(ficham.getFechaConsulta()), ficham.getOperacion(), str(ficham.getFrecRespiratoria()), str(ficham.getFrecCardiaca()), ficham.getPeso(), str(ficham.getEdad()), ficham.getHospitalizacion(), ficham.getSedacion(), ficham.getTemp(), str(ficham.getIdTabla())))
             db.commit()
-        
-        
-        medicamentos = []
-        medicamentosAux = medicamentosAux.split(';')
-        for med in medicamentosAux:
-            medicamentos.append(med)
-            idMedicamento = str(uuid.uuid4())
-            sql = 'INSERT INTO MedicamentosConsulta (idMedicamentosConsulta, nombreMedicamentos, FichaMedica_idFichaMedica, FichaMedica_TablaMedica_idTablaMedica) VALUES (%s, %s, %s, %s)'
-            mycursor.execute(sql, (str(idMedicamento), str(med), str(ficham.getId()), str(ficham.getIdTabla())))
-            db.commit()
-        
-        vacunas = []
-        vacunasAux = vacunasAux.split(';')
-        for vac in vacunasAux:
-            vacunas.append(vac)
-            idVacunas = str(uuid.uuid4())
-            sql = 'INSERT INTO VacunasSuministradasConsulta (idVacunasSuministradas, nombreVacuna, FichaMedica_idFichaMedica, FichaMedica_TablaMedica_idTablaMedica) VALUES (%s, %s, %s, %s)'
-            mycursor.execute(sql, (str(idVacunas), str(vac), str(ficham.getId()), str(ficham.getIdTabla())))
-            db.commit()
-        
-        # (idFichaMedica, sucursalVeterinaria, veterinarioACargo, fechaConsulta, operacion, frecuenciaRespiratoria, frecuenciaCardiaca, peso, edad, hospitalizacion, sedacion, temperatura, TablaMedica_idTablaMedica)
+
+            tratamientosAux = tratamientosAux.split(';')
+            medicamentosAux = medicamentosAux.split(';')
+            vacunasAux = vacunasAux.split(';')
+
+            tratamientos = []
+            for trat in tratamientosAux:
+                tratamientos.append(trat)
+                idTratamiento = str(uuid.uuid4())
+                sql = 'INSERT INTO TratamientosConsulta (idTratamientosConsulta, nombreTratamientos, caudaDeLaVisita, FichaMedica_idFichaMedica, FichaMedica_TablaMedica_idTablaMedica) VALUES (%s, %s, %s, %s, %s)'
+                mycursor.execute(sql, (str(idTratamiento), str(trat), str(causaVisita), str(ficham.getId()), str(ficham.getIdTabla())))
+                db.commit()
+            
+            
+            medicamentos = []
+            
+            for med in medicamentosAux:
+                medicamentos.append(med)
+                idMedicamento = str(uuid.uuid4())
+                sql = 'INSERT INTO MedicamentosConsulta (idMedicamentosConsulta, nombreMedicamentos, FichaMedica_idFichaMedica, FichaMedica_TablaMedica_idTablaMedica) VALUES (%s, %s, %s, %s)'
+                mycursor.execute(sql, (str(idMedicamento), str(med), str(ficham.getId()), str(ficham.getIdTabla())))
+                db.commit()
+            
+            vacunas = []
+            
+            for vac in vacunasAux:
+                vacunas.append(vac)
+                idVacunas = str(uuid.uuid4())
+                sql = 'INSERT INTO VacunasSuministradasConsulta (idVacunasSuministradas, nombreVacuna, FichaMedica_idFichaMedica, FichaMedica_TablaMedica_idTablaMedica) VALUES (%s, %s, %s, %s)'
+                mycursor.execute(sql, (str(idVacunas), str(vac), str(ficham.getId()), str(ficham.getIdTabla())))
+                db.commit()
+            
+
+            mascota.getTablaMedica().getFichas().append(ficham)
+
+            self.botonAgregarFichaOperacion.clicked.connect(lambda: self.crearFichaOperacion(mascota, operacion, ficham, tratamientos, medicamentos, vacunas, causaVisita))
+            self.botonAgregarFichaHosp.clicked.connect(lambda: self.crearFichaHospitalizacion(mascota, hospt, ficham))
+            self.botonAgregarFichaSedacion.clicked.connect(lambda: self.crearFichaSedacion(mascota, sedacion, ficham))
+     
         
 
-
-    def crearFichaOperacion(self, mascota, operacion):
+    def crearFichaOperacion(self, mascota : Mascota, operacion : list, ficha : FichaMedica, tratamientos, medicamentos, vacunas, causaVisita):
         operacion[0] = True
         uic.loadUi("Complementos/formularioFichaAuthCirugia.ui", self)
+        self.inputNombrePaciente.setText(mascota.getNombreMascota()) #se setean todos los valores ya obtenidos
+        self.inputNombrePaciente.setReadOnly(True)
+        self.inputPeso.setText(ficha.getPeso())
+        self.inputPeso.setReadOnly(True)
+        self.inputEspecie.setText(mascota.getEspecie())
+        self.inputEspecie.setReadOnly(True)
+        self.inputEdad.setText(ficha.getEdad())
+        self.inputEdad.setReadOnly(True)
+        self.inputRaza.setText(mascota.getRaza())
+        self.inputRaza.setReadOnly(True)
+        self.inputColor.setText(mascota.getColorMascota())
+        self.inputColor.setReadOnly(True)
+        self.inputNomTutor.setText(mascota.getNombreTutor())
+        self.inputNomTutor.setReadOnly(True)
+        self.inputRut.setText(mascota.getRutTutor())
+        self.inputRut.setReadOnly(True)
+        self.inputNumTelefono.setText(mascota.getNumeroTelefono())
+        self.inputNumTelefono.setReadOnly(True)
+        self.inputDireccion.setText(mascota.getDireccion())
+        self.inputDireccion.setReadOnly(True)
+        self.botonAgregarFCirugia.setEnabled(True)
 
-        pass
+        self.botonAgregarFCirugia.clicked.connect(lambda : self.agregarFichaOpBd(mascota, operacion[0], ficha, tratamientos, medicamentos, vacunas, causaVisita))
 
-    def crearFichaHospitalizacion(self, mascota, hospt):
-        hospt[0] = True
+    def agregarFichaOpBd(self, mascota :Mascota, operacion, ficha : FichaMedica, tratamientos, medicamentos, vacunas, causaVisita):
+        operacion = True
+        autorizacion = self.checkAuth.isChecked()
+        diagnostico = self.inputDiagnostico.toPlainText()
+        cirugiaARealizar = self.inputCirugia.toPlainText()
+        idOp = uuid.uuid4()
+        
+        sql = 'UPDATE fichaMedica SET operación=(%s) WHERE idFichaMEdica = (%s)'
+        mycursor.execute(sql, (operacion, str(ficha.getId())))
+        db.commit()
+
+        sql = 'INSERT INTO fichaOperación VALUES (%s, %s, %s, %s, %s, %s)'
+        mycursor.execute(sql, (str(idOp), str(diagnostico), str(cirugiaARealizar), autorizacion, str(ficha.getId()), str(ficha.getIdTabla())))
+        db.commit()
+
+        ficha.setOperacion(operacion)
+
+        self.volverACrearFicha(mascota, ficha, tratamientos, medicamentos, vacunas, causaVisita)
+        
+    def volverACrearFicha(self, mascota : Mascota, ficha : FichaMedica, tratamientos, medicamentos, vacunas, causaVisita):
+        uic.loadUi("Complementos/formularioCrearFicha.ui", self)
+
+        self.inputSucursal.setText(ficha.getSucursalVeterinaria())
+        self.inputSucursal.setReadOnly(True)
+        self.inputVetCargo.setText(ficha.getVeterinarioACargo())
+        self.inputVetCargo.setReadOnly(True)
+        qdate = QtCore.QDate.fromString(str(ficha.getFechaConsulta()), "yyyy-MM-dd")
+        self.fechaConsulta.setDisplayFormat("yyyy-MM-dd")
+        self.fechaConsulta.setDate(qdate)
+        self.fechaConsulta.setReadOnly(True)
+        self.inputFrecRespiratoria.setText(str(ficha.getFrecRespiratoria()))
+        self.inputFrecRespiratoria.setReadOnly(True)
+        self.inputFrecCardiaca.setText(str(ficha.getFrecCardiaca()))
+        self.inputFrecCardiaca.setReadOnly(True)
+        self.inputPeso.setText(str(ficha.getPeso()))
+        self.inputPeso.setReadOnly(True)
+        self.inputEdad.setText(str(ficha.getEdad()))
+        self.inputEdad.setReadOnly(True)
+        self.inputTemp.setText(str(ficha.getTemp()))
+        self.inputTemp.setReadOnly(True)
+
+
+        for fichaM in mascota.getTablaMedica().getFichas():
+            if(fichaM.getId() == ficha.getId()):
+                fichaM.setOperacion(ficha.getOperacion)
+                fichaM.setOpFicha()
+
+        for fichaM in mascota.getTablaMedica().getFichas():
+            if(fichaM.getId() == ficha.getId()):
+                fichaM.setVacFicha()
+                fichaM.setTratamiento()
+                fichaM.setMedicamentosConsulta()
+
+        self.inputCausaVisita.setText(str(causaVisita))
+
+        tratamientosMostrar = ''
+        for tratamiento in tratamientos:
+            item = str(tratamiento)
+            tratamientosMostrar = tratamientosMostrar + f' {item};'
+        
+        self.inputCausaVisita.setReadOnly(True)
+
+        self.inputTratamientos.setText(tratamientosMostrar)
+        self.inputTratamientos.setReadOnly(True)
+
+        medicamentosMostrar = ''
+        for medicamento in medicamentos:
+            item = str(medicamento)
+            medicamentosMostrar = medicamentosMostrar + f' {item};'
+        self.inputMedicamentos.setText(medicamentosMostrar)
+        self.inputMedicamentos.setReadOnly(True)
+
+        vacunasMostrar = ''
+        for vacuna in vacunas:
+            item = str(vacuna)
+            vacunasMostrar = vacunasMostrar + f' {item};'
+
+        self.inputVacunas.setText(vacunasMostrar)
+        self.inputVacunas.setReadOnly(True)
+
+        
+
+        self.botonVolver.clicked.connect(lambda : self.verScreenDatosTotal(mascota))
+        self.botonAgregarFicha.setEnabled(False)
+
+        if(ficha.getOperacion()):
+            self.botonAgregarFichaOperacion.setEnabled(False)
+        elif(ficha.getSedacion()):
+            self.botonAgregarSedacion.setEnabled(False)
+        elif(ficha.getHospitalizacion()):
+            self.botonAgregarHosp.setEnabled(False)
+
+
+
+
+    def crearFichaHospitalizacion(self, mascota : Mascota, hospt : list):
+        hospt[0]= True
         uic.loadUi("Complementos/formularioFichaHospitalizacion.ui", self)
-        pass
 
-    def crearFichaSedacion(self, mascota, sedacion):
+    def crearFichaSedacion(self, mascota : Mascota, sedacion : list):
         sedacion[0] = True
         uic.loadUi("Complementos/formularioFichaSedacion.ui", self)
-        pass
 
     def editarFichaMedicaConsulta(self, idMascota):
         for mascota in self.mascotas:
