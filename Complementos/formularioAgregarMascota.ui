@@ -272,7 +272,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
      <string>Alergias</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="inputAlergias">
     <property name="geometry">
      <rect>
       <x>200</x>
