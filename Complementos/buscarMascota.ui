@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>VentanaResumenVeterinario</class>
  <widget class="QMainWindow" name="VentanaResumenVeterinario">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -66,6 +69,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
     </property>
    </widget>
    <widget class="QPushButton" name="BotonBuscar">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>770</x>
@@ -154,6 +160,22 @@ background-color: rgb(93, 154, 139);</string>
     </property>
     <property name="text">
      <string>Agregar</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="MensajeErrorBusqueda">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>20</y>
+      <width>300</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ingrese el código de una mascota valido</string>
     </property>
    </widget>
   </widget>

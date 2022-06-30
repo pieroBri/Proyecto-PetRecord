@@ -416,6 +416,19 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
      </rect>
     </property>
    </widget>
+   <widget class="QPushButton" name="botonVolver">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>840</y>
+      <width>131</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Voler</string>
+    </property>
+   </widget>
    <zorder>label</zorder>
    <zorder>label_2</zorder>
    <zorder>label_3</zorder>
@@ -445,6 +458,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
    <zorder>inputTratamientos</zorder>
    <zorder>inputMedicamentos</zorder>
    <zorder>inputVacunas</zorder>
+   <zorder>botonVolver</zorder>
   </widget>
  </widget>
  <resources/>
