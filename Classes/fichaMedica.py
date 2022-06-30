@@ -92,7 +92,7 @@ class FichaMedica:
     def getHospitalizacion(self):
         return self.hospitalizacion
     
-    def getHospitalizacionFciha(self):
+    def getHospitalizacionFicha(self):
         return self.hospitalizacionFicha
     
     def getSedacion(self):
@@ -160,6 +160,9 @@ class FichaMedica:
                 'cirugiaARealizar':opFicha[2],
                 'autTutor': aut
             }
+
+    def setOpFichaLocal(self, opFicha):
+        self.operacionFicha = opFicha
     
     def setMedicamentosConsulta(self):
         sql = 'SELECT * FROM medicamentosconsulta WHERE FichaMedica_idFichaMedica = (%s)'
@@ -171,6 +174,9 @@ class FichaMedica:
             'nomMedicamento' : medicamento[1],
             }
             self.medicamentosConsulta.append(med)
+            
+    def setMedicamentosConsultaLocal(self, medicamentos):
+        self.medicamentosConsulta = medicamentos
         
     def setVacFicha(self):
         sql = 'SELECT * FROM VacunasSuministradasConsulta WHERE FichaMedica_idFichaMedica = (%s)'
@@ -182,6 +188,9 @@ class FichaMedica:
             'nomVacuna' : vacuna[1],
             }
             self.vacunasSuministradasConsulta.append(vac)
+    
+    def setVacFichaLocal(self, vacunas):
+        self.vacunasSuministradasConsulta = vacunas
 
     def setHospFicha(self):
         if(self.hospitalizacion == 1):
@@ -192,6 +201,8 @@ class FichaMedica:
                 'id':hospiFicha[0],
                 'motivo':hospiFicha[1],
             }
+    def setHospFichaLocal(self, hospFicha):
+        self.hospitalizacionFicha = hospFicha
 
     def setSedFicha(self):
         if (self.sedacion == 1):
@@ -206,12 +217,16 @@ class FichaMedica:
                 'id':sedacion[0],
                 'autorizacion':aut,
             }
+    def setSedFichaLocal(self, sedDicc):
+        self.sedacionFicha = sedDicc
+
+    def setTratamientoLocal(self, tratamiento):
+        self.tratamientoFicha = tratamiento
 
     def setTratamiento(self):
         sql = 'SELECT * FROM TratamientosConsulta WHERE FichaMedica_idFichaMedica = (%s)'
         mycursor.execute(sql, (str(self.id),))
         tratamientos = mycursor.fetchall()
-        print(tratamientos)
         for tratamiento in tratamientos:
             trat = {
             'id' : tratamiento[0],

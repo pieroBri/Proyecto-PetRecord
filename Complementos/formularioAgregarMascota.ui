@@ -34,33 +34,20 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>60</y>
+      <y>40</y>
       <width>120</width>
       <height>35</height>
      </rect>
     </property>
     <property name="text">
-     <string>Nombre paciente</string>
+     <string>Nombre Mascota</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>120</y>
-      <width>120</width>
-      <height>35</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Peso</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>180</y>
+      <y>100</y>
       <width>120</width>
       <height>35</height>
      </rect>
@@ -69,24 +56,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
      <string>Especie</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_5">
+   <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>240</y>
-      <width>120</width>
-      <height>35</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Edad</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>360</y>
+      <y>160</y>
       <width>120</width>
       <height>35</height>
      </rect>
@@ -95,11 +69,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
      <string>Color</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_7">
+   <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>300</y>
+      <y>220</y>
       <width>120</width>
       <height>35</height>
      </rect>
@@ -108,183 +82,203 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.176
      <string>Raza</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_8">
+   <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>420</y>
+      <y>280</y>
       <width>120</width>
       <height>35</height>
      </rect>
     </property>
     <property name="text">
-     <string>Motivo Hospitalizacion</string>
+     <string>Nombre Tutor</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="inputNombrePaciente">
+   <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>60</y>
-      <width>391</width>
-      <height>31</height>
+      <x>60</x>
+      <y>400</y>
+      <width>120</width>
+      <height>35</height>
      </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="inputPeso">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>120</y>
-      <width>391</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="inputRaza">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>300</y>
-      <width>391</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="inputColor">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>360</y>
-      <width>391</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="botonAgregarFH">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>700</y>
-      <width>131</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>0</height>
-     </size>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-      <italic>false</italic>
-      <underline>false</underline>
-      <strikeout>false</strikeout>
-      <stylestrategy>PreferDefault</stylestrategy>
-     </font>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::StrongFocus</enum>
-    </property>
-    <property name="acceptDrops">
-     <bool>false</bool>
-    </property>
-    <property name="toolTip">
-     <string/>
     </property>
     <property name="text">
-     <string>Add Ficha Hospitalizacion</string>
+     <string>Numero Telefono</string>
     </property>
-    <property name="iconSize">
-     <size>
-      <width>16</width>
-      <height>16</height>
-     </size>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>340</y>
+      <width>120</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Rut tutor</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>460</y>
+      <width>120</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Dirección tutor</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="inputNombreMascota">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>40</y>
+      <width>391</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QLineEdit" name="inputEspecie">
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>180</y>
+      <y>100</y>
       <width>391</width>
       <height>31</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
    </widget>
-   <widget class="QLineEdit" name="inputEdad">
+   <widget class="QLineEdit" name="inputRutTutor">
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>240</y>
+      <y>340</y>
       <width>391</width>
       <height>31</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
    </widget>
-   <widget class="QPlainTextEdit" name="inputMotivoHospitalizacion">
+   <widget class="QLineEdit" name="inputDireccion">
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>420</y>
+      <y>460</y>
       <width>391</width>
-      <height>111</height>
+      <height>31</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
    </widget>
-   <widget class="QWidget" name="contenedorBotonHosp" native="true">
+   <widget class="QPushButton" name="botonAgregarMascota">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>700</y>
+      <y>640</y>
       <width>131</width>
       <height>51</height>
+     </rect>
+    </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhNone</set>
+    </property>
+    <property name="text">
+     <string>Agregar Mascota</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="contenedorBoton" native="true">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>840</y>
+      <width>141</width>
+      <height>51</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="inputRaza">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>220</y>
+      <width>391</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="inputNombreTutor">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>280</y>
+      <width>391</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="inputNumTelefono">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>400</y>
+      <width>391</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="botonVolver">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>830</y>
+      <width>131</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Volver</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="inputColor">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>160</y>
+      <width>391</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>530</y>
+      <width>120</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Alergias</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="inputAlergias">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>530</y>
+      <width>391</width>
+      <height>31</height>
      </rect>
     </property>
    </widget>

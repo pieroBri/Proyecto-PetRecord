@@ -15,29 +15,48 @@ class Mascota:
         self.numeroTelefono = numeroTelefono
         self.direccion = direccion
 
-    def editarInfoBasicaMascota(self):
-        pass
+
+    def setOpFichaLocal(self, idFicha, opDicc, operacion):
+        self.tablaMedica.setOpFichaLocal(idFicha, opDicc, operacion)
+
+    def setVacFichaLocal(self, idFicha, vacDicc):
+        self.tablaMedica.setVacFichaLocal(idFicha, vacDicc)
+
+    def setHospFichaLocal(self, idFicha, hospFicha, hosp):
+        self.tablaMedica.setHospFichaLocal(idFicha, hospFicha, hosp)
+
+    def setSedFichaLocal(self, idFicha, sedDicc, sedacion):
+        self.tablaMedica.setSedFichaLocal(idFicha, sedDicc, sedacion)
+
+    def setTratamientoLocal(self, idFicha, tratamiento):
+        self.tablaMedica.setTratamientoLocal(idFicha, tratamiento)
+
+    def setMedicamentosConsultaLocal(self, idFicha, medicamentos):
+        self.tablaMedica.setMedicamentosConsultaLocal(idFicha, medicamentos)
+
+    #def editarInfoBasicaMascota(self):
+        #pass
 
     def crearFichaMedicaConsulta(self,fichaMedica):
         pass
 
-    def editarFichaMedicaConsulta(self,fichaMedica):
-        pass
+    # def editarFichaMedicaConsulta(self,fichaMedica):
+    #     pass
 
     def buscarFichaMedicaConsulta(self):
         pass
 
-    def validarFormatoDatosFichaMedicaGeneral():
-        pass
+    # def validarFormatoDatosFichaMedicaGeneral():
+    #     pass
 
-    def validarFormatoDatosFichaMedica():
-        pass
+    # def validarFormatoDatosFichaMedica():
+    #     pass
 
-    def solicitudServCrear():
-        pass
+    # def solicitudServCrear():
+    #     pass
 
-    def solicitudServEditar():
-        pass
+    # def solicitudServEditar():
+    #     pass
 
     def getId(self):
         return self.id

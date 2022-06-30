@@ -38,6 +38,7 @@ class TablaMedica:
             ficham.setTratamiento()
             self.fichas.append(ficham)
 
+
     def crearFichaMedicaConsulta(self):
         pass
 
@@ -58,6 +59,40 @@ class TablaMedica:
 
     def solicitudConexionServMostrar(self):
         pass
+
+    def setOpFichaLocal(self, idFicha, opDicc, operacion):
+        for ficha in self.fichas:
+            if ficha.getId() == idFicha:
+                ficha.setOperacion(operacion)
+                ficha.setOpFichaLocal(opDicc)
+
+    def setVacFichaLocal(self, idFicha, vacDicc):
+        for ficha in self.fichas:
+            if ficha.getId() == idFicha:
+                ficha.setVacFichaLocal(vacDicc)
+    
+    def setHospFichaLocal(self, idFicha, hospFicha, hosp):
+        for ficha in self.fichas:
+            if ficha.getId() == idFicha:
+                ficha.setHospitalizacion(hosp)
+                ficha.setHospFichaLocal(hospFicha)
+    
+    def setSedFichaLocal(self, idFicha, sedDicc, sedacion):
+        for ficha in self.fichas:
+            if ficha.getId() == idFicha:
+                ficha.setSedacion(sedacion)
+                ficha.setHospFichaLocal(sedDicc)
+    
+    def setTratamientoLocal(self, idFicha, tratamiento):
+        for ficha in self.fichas:
+            if ficha.getId() == idFicha:
+                ficha.setTratamientoLocal(tratamiento)
+
+    def setMedicamentosConsultaLocal(self, idFicha, medicamentos):
+        for ficha in self.fichas:
+            if ficha.getId() == idFicha:
+                ficha.setMedicamentosConsultaLocal(medicamentos)
+
 
     def getFichas(self) -> list:
         return self.fichas
@@ -80,7 +115,7 @@ class TablaMedica:
     def setId(self, id):
         self.id = id
 
-    def setFcihas(self, fichas):
+    def setFichas(self, fichas):
         self.fichas.append(fichas)
     
     def setAlergias(self, alergias):
