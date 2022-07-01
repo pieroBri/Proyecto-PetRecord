@@ -394,7 +394,7 @@ class TerminalVeterinario(QMainWindow):
         numero = self.inputNumTelefono.text()
         direccion = self.inputDireccion.text()
 
-        #Datos para tabla
+        #Datos para tabla verdadera
         idTabla = str(uuid.uuid4())
         alergias = self.inputAlergias.text()
         alergias = alergias.split("; ")
