@@ -163,6 +163,7 @@ class FichaMedica:
             }
 
     def setOpFichaLocal(self, opFicha):
+        print("AAAAAAAAAAAAAAAAAAAAAA")
         self.operacionFicha = opFicha
     
     def setMedicamentosConsulta(self):

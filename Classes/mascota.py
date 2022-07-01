@@ -34,6 +34,16 @@ class Mascota:
     def setMedicamentosConsultaLocal(self, idFicha, medicamentos):
         self.tablaMedica.setMedicamentosConsultaLocal(idFicha, medicamentos)
 
+    def setRegistroDeOperaciones(self, operacion):
+        self.tablaMedica.setRegistroDeOperacionesTrue(operacion)
+        print(operacion)
+    
+    def setRegistroDeVacunas(self, vacuna):
+        self.tablaMedica.setRegistroDeVacunasTrue(vacuna)
+
+    def setRegistroAlergias(self, alergias):
+        self.tablaMedica.setAlergiasTrue(alergias)
+
     #def editarInfoBasicaMascota(self):
         #pass
 

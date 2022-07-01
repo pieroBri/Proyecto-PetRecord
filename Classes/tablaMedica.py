@@ -60,6 +60,19 @@ class TablaMedica:
     def solicitudConexionServMostrar(self):
         pass
 
+    def setRegistroDeOperacionesTrue(self, operacion): #local
+        print("----------")
+        self.registroDeOperaciones.append(operacion)
+        
+
+    def setAlergiasTrue(self, alergias):
+        for al in alergias:
+            self.vacunasSuministradas.append(al)
+
+    def setRegistroDeVacunasTrue(self, vacuna):
+        for vac in vacuna:
+            self.vacunasSuministradas.append(vac)
+
     def setOpFichaLocal(self, idFicha, opDicc, operacion):
         for ficha in self.fichas:
             if ficha.getId() == idFicha:

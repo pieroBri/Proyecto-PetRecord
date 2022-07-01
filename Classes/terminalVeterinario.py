@@ -176,6 +176,14 @@ class TerminalVeterinario(QMainWindow):
         sql = "INSERT INTO mascota_has_terminalveterinario values (%s, %s, %s, %s, %s)"
         mycursor.execute(sql, (str(mascotaNueva.getId()), str(mascotaNueva.getTablaMedica().getId()), str(self.id), str(self.idVeterinaria), str(self.nombreVeterinaria)))
         db.commit()
+
+        mascotaTabla = mascotaNueva.getTablaMedica()
+        for alergia in mascotaTabla.getAlergias():
+            idAlergia = str(uuid.uuid4())
+            sql = "INSERT INTO alergias values (%s, %s, %s)"
+            mycursor.execute(sql, (idAlergia, alergia, str(mascotaTabla.getId())))
+            db.commit()
+        
     
     def buscarMascotaLocal(self, idMascotaBuscada):
         # sql = 'SELECT * FROM mascota WHERE idMascota = (%s)'
@@ -263,12 +271,15 @@ class TerminalVeterinario(QMainWindow):
         
         value2 = self.datoTablaMedica.item(1)
         for i in range(len(tablaMedicaActual.getRegistroDeOperaciones())):
-            operaciones = operaciones + str(tablaMedicaActual.getRegistroDeOperaciones()[i][1])
+            operaciones = operaciones + ' ' +str(tablaMedicaActual.getRegistroDeOperaciones()[i][1])
+        
+        
         value2.setText(value2.text() + '  ' + operaciones)
 
         value2 = self.datoTablaMedica.item(2)
         for i in range(len(tablaMedicaActual.getVacunasSuministradas())):
-            vacunas = vacunas + str(tablaMedicaActual.getVacunasSuministradas()[i][1])
+            vacunas = vacunas + ' ' + str(tablaMedicaActual.getVacunasSuministradas()[i][1])
+        
         value2.setText(value2.text() + '  ' + vacunas)
 
         for i in range(len(tablaMedicaActual.fichas)):
@@ -388,12 +399,14 @@ class TerminalVeterinario(QMainWindow):
         alergias = self.inputAlergias.text()
         alergias = alergias.split("; ")
         
+
         registroOperaciones = ''
         vacunasSuministradas = ''
 
         tablaNueva = TablaMedica(idTabla, alergias, registroOperaciones, vacunasSuministradas)
         
         mascotaEnviada = Mascota(idMascotaBuscada, nombreMascota, especie, color, raza, nomTutor, rut, numero, direccion, tablaNueva)
+        
         self.ingresarMascotaAlSistema(mascotaEnviada)
         
         self.botonAgregarMascota.setEnabled(False)
@@ -542,6 +555,8 @@ class TerminalVeterinario(QMainWindow):
         
         vacunas = []
         vacClase = []
+        vacArr = []
+        vacArrTabla = []
         vacDicc = {}
         
         for vac in vacunasAux:
@@ -551,12 +566,22 @@ class TerminalVeterinario(QMainWindow):
                 'id' : idVacunas,
                 'nomVacuna' : vac,
             }
-            vacClase.append(vacDicc) 
+            vacArr.append(idVacunas)
+            vacArr.append(vac)
+            vacArr.append(ficham.getIdTabla())  
+            vacArrTabla.append(vacArr)      
+            vacClase.append(vacDicc)
+            vacArr = []
             sql = 'INSERT INTO VacunasSuministradasConsulta (idVacunasSuministradas, nombreVacuna, FichaMedica_idFichaMedica, FichaMedica_TablaMedica_idTablaMedica) VALUES (%s, %s, %s, %s)'
             mycursor.execute(sql, (str(idVacunas), str(vac), str(ficham.getId()), str(ficham.getIdTabla())))
             db.commit()
+
+            sql = 'INSERT INTO registrovacunassuministradas (idVacunasSuministradas, nombreVacuna, TablaMedica_idTablaMedica) VALUES (%s, %s, %s)'
+            mycursor.execute(sql, (str(idVacunas), str(vac), str(ficham.getIdTabla())))
+            db.commit()
         
-    
+        mascota.setRegistroDeVacunas(vacArrTabla)
+
         self.setearDatosLocal(ficham, tratClase, medClase, vacClase, mascota)
         self.botonAgregarFichaOperacion.clicked.connect(lambda: self.crearFichaOperacion(mascota, ficham))
         self.botonAgregarFichaHosp.clicked.connect(lambda: self.crearFichaHospitalizacion(mascota, ficham))
@@ -615,15 +640,25 @@ class TerminalVeterinario(QMainWindow):
         mycursor.execute(sql, (str(idOp), str(diagnostico), str(cirugiaARealizar), autorizacion, str(ficha.getId()), str(ficha.getIdTabla())))
         db.commit()
 
+        sql = 'Insert INTO registroDeOperaciones VALUES (%s, %s,%s)'
+        mycursor.execute(sql, (str(idOp), str(cirugiaARealizar),  str(ficha.getIdTabla())))
+        db.commit()
+
         opDicc = {
                 'id':idOp,
                 'diagnostico':diagnostico,
                 'cirugiaARealizar':cirugiaARealizar,
                 'autTutor': autorizacion
             }
+
+        opClss = []
+        opClss.append(idOp)
+        opClss.append(cirugiaARealizar)
+        opClss.append(ficha.getIdTabla())
         for mascotaClss in self.mascotas:
             if(mascotaClss.getId() == mascota.getId()):
                 mascotaClss.setOpFichaLocal(ficha.getId(), opDicc, operacion)
+                mascotaClss.setRegistroDeOperaciones(opClss)
 
         self.volverACrearFicha(mascota, ficha)
 
