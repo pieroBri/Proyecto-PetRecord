@@ -93,6 +93,7 @@ class FichaMedica:
         return self.hospitalizacion
     
     def getHospitalizacionFicha(self):
+        print("get-----------"+str(self.hospitalizacionFicha))
         return self.hospitalizacionFicha
     
     def getSedacion(self):
@@ -202,7 +203,9 @@ class FichaMedica:
                 'motivo':hospiFicha[1],
             }
     def setHospFichaLocal(self, hospFicha):
+        
         self.hospitalizacionFicha = hospFicha
+        print("set --------------------------------"+str(self.hospitalizacionFicha))
 
     def setSedFicha(self):
         if (self.sedacion == 1):
@@ -219,6 +222,7 @@ class FichaMedica:
             }
     def setSedFichaLocal(self, sedDicc):
         self.sedacionFicha = sedDicc
+        print("set sedacion-----------------------"+str(self.sedacionFicha))
 
     def setTratamientoLocal(self, tratamiento):
         self.tratamientoFicha = tratamiento
