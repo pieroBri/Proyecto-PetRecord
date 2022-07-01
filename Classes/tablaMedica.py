@@ -19,9 +19,9 @@ class TablaMedica:
     def __init__(self, id, alergias, registroDeOperaciones, vacunasSuministradas):
         self.id = id
         self.fichas = []
-        self.alergias = alergias
-        self.registroDeOperaciones = registroDeOperaciones #string
-        self.vacunasSuministradas = vacunasSuministradas #string
+        self.alergias = []
+        self.registroDeOperaciones = [] #string
+        self.vacunasSuministradas = [] #string
     
 
     def cargarFichas(self):

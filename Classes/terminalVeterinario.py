@@ -398,6 +398,7 @@ class TerminalVeterinario(QMainWindow):
         idTabla = str(uuid.uuid4())
         alergias = self.inputAlergias.text()
         alergias = alergias.split("; ")
+            
         
 
         registroOperaciones = ''
