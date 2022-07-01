@@ -604,7 +604,7 @@ class TerminalVeterinario(QMainWindow):
         autorizacion = self.checkAuth.isChecked()
         diagnostico = self.inputDiagnostico.toPlainText()
         cirugiaARealizar = self.inputCirugia.toPlainText()
-        idOp = uuid.uuid4()
+        idOp = str(uuid.uuid4())
         
         sql = 'UPDATE fichaMedica SET operación=(%s) WHERE idFichaMedica = (%s)'
         mycursor.execute(sql, (operacion, str(ficha.getId())))
@@ -787,7 +787,7 @@ class TerminalVeterinario(QMainWindow):
     def agregarFichaHospBd(self, mascota :Mascota, ficha : FichaMedica):
         hospitalizacion = True
         motivoHosp = self.inputMotivoHospitalizacion.toPlainText()
-        idHosp = uuid.uuid4()
+        idHosp = str(uuid.uuid4())
         sql = 'UPDATE fichamedica SET hospitalización=(%s) WHERE idFichaMedica = (%s)'
         mycursor.execute(sql, (hospitalizacion, str(ficha.getId())))
         db.commit()
@@ -861,24 +861,25 @@ class TerminalVeterinario(QMainWindow):
         
         sedacion = True
         autorizacion = self.checkAuth.isChecked()
-        idHosp = uuid.uuid4()
+        idSed = str(uuid.uuid4())
         
         sql = 'UPDATE fichamedica SET sedación=(%s) WHERE idFichaMedica = (%s)'
         mycursor.execute(sql, (sedacion, str(ficha.getId())))
         db.commit()
 
         sql = 'INSERT INTO fichasedación VALUES (%s, %s, %s, %s)'
-        mycursor.execute(sql, (str(idHosp), autorizacion, str(ficha.getId()), str(ficha.getIdTabla())))
+        mycursor.execute(sql, (str(idSed), autorizacion, str(ficha.getId()), str(ficha.getIdTabla())))
         db.commit()
 
         ficha.setSedacion(sedacion)
 
         sedDicc = {
-                    'id':idHosp,
+                    'id':idSed,
                     'autorizacion':autorizacion
                 }
         for mascotaClss in self.mascotas:
             if(mascotaClss.getId() == mascota.getId()):
+                print("sedacion ----------------------------------------------------------------"+ str(sedDicc))
                 mascotaClss.setSedFichaLocal(ficha.getId() ,sedDicc, sedacion)
         
 

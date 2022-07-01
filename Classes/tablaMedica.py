@@ -81,7 +81,7 @@ class TablaMedica:
         for ficha in self.fichas:
             if ficha.getId() == idFicha:
                 ficha.setSedacion(sedacion)
-                ficha.setHospFichaLocal(sedDicc)
+                ficha.setSedFichaLocal(sedDicc)
     
     def setTratamientoLocal(self, idFicha, tratamiento):
         for ficha in self.fichas:
