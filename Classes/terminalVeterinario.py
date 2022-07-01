@@ -282,7 +282,8 @@ class TerminalVeterinario(QMainWindow):
 
     def volverBuscar(self):
         uic.loadUi("Complementos/buscarMascota.ui", self)
-        self.verificarMascotaEnSistema()
+        self.MensajeErrorBusqueda.setVisible(False)
+        self.BotonBuscar.clicked.connect(self.verificarMascotaEnSistema)
         
         
     def getFichaMascota(self, mascotaMostrar:Mascota):
